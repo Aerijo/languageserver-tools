@@ -10,6 +10,8 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/filereadstream.h>
 
+#include "position.h"
+
 
 /**
  * - Messages are generic valid JSON RPC messages
@@ -27,7 +29,7 @@ typedef int SymbolKind;
 typedef int CompletionItemKind;
 typedef string CodeActionKind;
 
-enum FileChangeType {
+enum class FileChangeType {
     Created = 1,
     Changed = 2,
     Deleted = 3
@@ -39,6 +41,7 @@ struct FileEvent {
 };
 
 class Id {
+public:
     bool isIdString;
 
     union {
@@ -63,7 +66,7 @@ class Id {
     }
 };
 
-enum LSP_ERROR {
+enum class LSP_ERROR {
     // JSON RPC
     ParseError = -32700,
     InvalidRequest = -32600,
@@ -81,35 +84,35 @@ enum LSP_ERROR {
 };
 
 // TODO: May change; safer as string
-enum ResourceOperationKind {
+enum class ResourceOperationKind {
     TextDocumentEdit,
     CreateFile,
     RenameFile,
     DeleteFile
 };
 
-enum FailureHandlingKind {
+enum class FailureHandlingKind {
     Abort,
     Transactional,
     Undo,
     TextOnlyTransactional
 };
 
-enum MessageType {
+enum class MessageType {
     Error = 1,
     Warning = 2,
     Info = 3,
     Log = 4
 };
 
-enum DiagnosticSeverity {
+enum class DiagnosticSeverity {
     ERROR = 1,
     WARNING = 2,
     INFORMATION = 3,
     HINT = 4
 };
 
-enum Trace {
+enum class Trace {
     Off,
     Messages,
     Verbose
@@ -138,15 +141,7 @@ struct UnregisterationParams {
     vector<Unregisteration> unregisterations;
 };
 
-struct Position {
-    int line;
-    int character;
-};
 
-struct Range {
-    Position start;
-    Position end;
-};
 
 struct Location {
     DocumentUri uri;
@@ -255,7 +250,7 @@ struct TextDocumentItem {
 
 struct TextDocumentPositionParams {
     TextDocumentIdentifier textDocument;
-    Position position;
+    Point position;
 };
 
 struct ShowMessageRequestParams {
@@ -275,10 +270,6 @@ struct DocumentFilter {
 struct MarkupContent {
     MarkupKind kind;
     string value;
-};
-
-struct WorkspaceEdit {
-
 };
 
 struct WorkspaceClientCapabilities {
@@ -454,7 +445,7 @@ struct InitializeParams {
     DocumentUri rootUri;
     Value initializationOptions;
     ClientCapabilities capabilities;
-    Trace trace = Off;
+    Trace trace = Trace::Off;
     vector<WorkspaceFolder> workspaceFolders;
 };
 
@@ -570,7 +561,7 @@ void sendResponse (const string &id, Value &result);
 
 void sendResponse (int id, Value &result);
 
-void sendError (int code, const string &message);
+void sendError (LSP_ERROR code, const string &message);
 
 void sendRequest (int id, const string &method, Value &params);
 

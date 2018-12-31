@@ -1,12 +1,12 @@
-#include "library.h"
-
 #include <iostream>
+
+#include "library.h"
 
 #define STDIN_EXPECT(e) if (getchar() != e) { gotoNextHeader(); continue; };
 
 void handleFailedJSON () {
-    const string fpp = "Failed to parse JSON";
-    sendError(LSP_ERROR::ParseError, fpp);
+//    const string fpp = "Failed to parse JSON";
+//    sendError(LSP_ERROR::ParseError, fpp);
 }
 
 void verifyJSON (const Document &json) {
@@ -101,10 +101,10 @@ void cancelRequest (int id) {
 
 void cancelRequest (const string &id) {
     Document message;
-    auto &allocator = message.GetAllocator();
+//    auto &allocator = message.GetAllocator();
 
-    message.AddMember("method", "$/cancelRequest", allocator);
-    message.AddMember("params", Value().SetObject().AddMember("id", id, allocator), allocator);
+//    message.AddMember("method", "$/cancelRequest", allocator);
+//    message.AddMember("params", Value().SetObject().AddMember("id", id, allocator), allocator);
 
     sendMessage(message);
 }
@@ -139,10 +139,10 @@ void sendResponse (Value &result) {
 
 void sendResponse (const string &id, Value &result) {
     Document json;
-    auto &allocator = json.GetAllocator();
-
-    json.AddMember("id", id, allocator);
-    json.AddMember("result", result, allocator);
+//    auto &allocator = json.GetAllocator();
+//
+//    json.AddMember("id", id, allocator);
+//    json.AddMember("result", result, allocator);
 
     sendMessage(json);
 }
@@ -159,49 +159,49 @@ void sendResponse (const int id, Value &result) {
 
 void sendError (int code, const string &message) {
     Document json;
-    auto &allocator = json.GetAllocator();
-
-    json.AddMember("code", code, allocator);
-    json.AddMember("message", message, allocator);
+//    auto &allocator = json.GetAllocator();
+//
+//    json.AddMember("code", code, allocator);
+//    json.AddMember("message", message, allocator);
 
     sendMessage(json);
 }
 
 void sendRequest (const int id, const string &method, Value &params) {
     Document json;
-    auto &allocator = json.GetAllocator();
-
-    json.AddMember("id", id, allocator);
-    json.AddMember("method", method, allocator);
-    json.AddMember("params", params, allocator);
+//    auto &allocator = json.GetAllocator();
+//
+//    json.AddMember("id", id, allocator);
+//    json.AddMember("method", method, allocator);
+//    json.AddMember("params", params, allocator);
 
     sendMessage(json);
 }
 
 void sendNotification (const string &method, Value &params) {
     Document json;
-    auto &allocator = json.GetAllocator();
-
-    json.AddMember("method", method, allocator);
-    json.AddMember("params", params, allocator);
+//    auto &allocator = json.GetAllocator();
+//
+//    json.AddMember("method", method, allocator);
+//    json.AddMember("params", params, allocator);
 
     sendMessage(json);
 }
 
-void sendMessage (Document &message) {
-    message.AddMember("jsonrpc", "2.0", message.GetAllocator());
-
-    StringBuffer buffer;
-    Writer<StringBuffer> writer (buffer);
-    message.Accept(writer);
-
-    std::cout
-            << "Content-Length: "
-            << buffer.GetLength()
-            << "\r\n\r\n"
-            << buffer.GetString();
-    std::cout.flush();
-}
+//void sendMessage (Document &message) {
+//    message.AddMember("jsonrpc", "2.0", message.GetAllocator());
+//
+//    StringBuffer buffer;
+//    Writer<StringBuffer> writer (buffer);
+//    message.Accept(writer);
+//
+//    std::cout
+//            << "Content-Length: "
+//            << buffer.GetLength()
+//            << "\r\n\r\n"
+//            << buffer.GetString();
+//    std::cout.flush();
+//}
 
 void awaitInitializeRequest () {
 
